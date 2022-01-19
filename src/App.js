@@ -92,6 +92,7 @@ function App() {
           show={isAddExpenseModalVisible}
           defaultCategory={defaultCategory}
           handleClose={closeAddExpenseModal}
+          addExpense={addExpense}
         ></AddExpenseModal>
       </Container>
     </div>
