@@ -7,8 +7,13 @@ import AddExpenseModal from "./components/AddExpenseModal";
 import BudgetCard from "./components/BudgetCard";
 
 function App() {
-  const { addBudget, UNCATEGORISED_CATEGORY_ID, budgets, getBudgetExpenses, addExpense} =
-    useBudgets();
+  const {
+    addBudget,
+    UNCATEGORISED_CATEGORY_ID,
+    budgets,
+    getBudgetExpenses,
+    addExpense,
+  } = useBudgets();
 
   const [isAddBudgetModalVisible, setIsAddBudgetModalVisible] = useState(false);
   const closeAddBudgetModal = function () {
@@ -31,6 +36,7 @@ function App() {
   const [defaultCategory, setDefaultCategory] = useState(
     UNCATEGORISED_CATEGORY_ID
   );
+
 
   return (
     <div className="App">
@@ -65,7 +71,10 @@ function App() {
                   name={budget.name}
                   amount={amount}
                   max={budget.max}
-                  addExpense={() => {}}
+                  addExpense={() => {
+                    setDefaultCategory(budget._id)
+                    openAddExpenseModal();
+                  }}
                   onViewExpensesClick={() => {}}
                   showButtons
                 />

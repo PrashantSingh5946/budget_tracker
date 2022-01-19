@@ -13,12 +13,13 @@ export default function AddExpenseModal({
   const categoryRef = useRef();
   const addButtonRef = useRef();
 
-  const {budgets} = useBudgets();
+  const { budgets, UNCATEGORISED_CATEGORY_ID } = useBudgets();
 
   function handleSubmit(e) {
     e.preventDefault();
- 
+
     handleClose();
+    console.log(categoryRef.current.value);
   }
 
   return (
@@ -38,14 +39,19 @@ export default function AddExpenseModal({
               <Form.Control type="number" required step={1} ref={amountRef} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="Category">
-                Category
-              </Form.Label>
-              <Form.Select id="Category" ref={categoryRef}>
-                <option>Uncategorized</option>
-                {
-                    budgets.map((budget)=> <option key={budget._Id} value={budget._Id}>{budget.name}</option>)
-                }
+              <Form.Label htmlFor="Category">Category</Form.Label>
+              <Form.Select ref={categoryRef} defaultValue={defaultCategory}>
+                <option
+                  key={UNCATEGORISED_CATEGORY_ID}
+                  id={UNCATEGORISED_CATEGORY_ID}
+                >
+                  Uncategorized
+                </option>
+                {budgets.map(budget => (
+                  <option key={budget._id} value={budget._id}>
+                    {budget.name}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
             <Form.Group className="my-3" controlId="">
