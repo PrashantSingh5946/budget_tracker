@@ -33,12 +33,19 @@ export const BudgetProvider = ({ children }) => {
     {
         return(expenses.filter((expense) => expense.budgetId == budgetId))
     }
+
+    function deleteBudget(budgetId)
+    {
+        setBudgets(budgets.filter((budget) => budget._id!=budgetId))
+        setExpenses(expenses.filter((expense) => expense.budgetId!=budgetId))
+    }
     return (
         <BudgetContext.Provider value={{
             budgets,
             addBudget,
             addExpense,
             getBudgetExpenses,
+            deleteBudget,
             UNCATEGORISED_CATEGORY_ID
         }}>
             {children}
