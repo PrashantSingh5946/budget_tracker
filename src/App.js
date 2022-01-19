@@ -5,6 +5,7 @@ import AddBudgetModal from "./components/AddBudgetModal";
 import { useState } from "react";
 import AddExpenseModal from "./components/AddExpenseModal";
 import BudgetCard from "./components/BudgetCard";
+import ShowExpensesModal from "./components/ShowExpensesModal";
 
 function App() {
   const {
@@ -14,6 +15,13 @@ function App() {
     getBudgetExpenses,
     addExpense,
   } = useBudgets();
+
+  const [defaultCategory, setDefaultCategory] = useState(
+    UNCATEGORISED_CATEGORY_ID
+  );
+
+  const[showExpenses,setShowExpenses] = useState(false);
+  function closeExpenses(){setShowExpenses(false); setDefaultCategory(UNCATEGORISED_CATEGORY_ID)}
 
   const [isAddBudgetModalVisible, setIsAddBudgetModalVisible] = useState(false);
   const closeAddBudgetModal = function () {
@@ -33,9 +41,7 @@ function App() {
     setIsAddExpenseModalVisible(true);
   };
 
-  const [defaultCategory, setDefaultCategory] = useState(
-    UNCATEGORISED_CATEGORY_ID
-  );
+
 
 
   return (
@@ -65,6 +71,9 @@ function App() {
                 (total, expense) => total + expense.amount,
                 0
               );
+
+              const expenses = getBudgetExpenses(budget._id)
+              console.log(expenses)
               return (
                 <BudgetCard
                   key={budget._id}
@@ -75,7 +84,9 @@ function App() {
                     setDefaultCategory(budget._id)
                     openAddExpenseModal();
                   }}
-                  onViewExpensesClick={() => {}}
+                  displayExpenses={(expenses,name)=>{setShowExpenses(true); setDefaultCategory(budget._id)}}
+                  expenses={[...expenses]}
+                  id={budget._id}
                   showButtons
                 />
               );
@@ -94,6 +105,13 @@ function App() {
           handleClose={closeAddExpenseModal}
           addExpense={addExpense}
         ></AddExpenseModal>
+
+        <ShowExpensesModal
+        show={showExpenses}
+        expenses={getBudgetExpenses(defaultCategory)}
+        handleClose={closeExpenses}
+        budget={budgets.find((budget) => budget._id==defaultCategory)}
+        ></ShowExpensesModal>
       </Container>
     </div>
   );

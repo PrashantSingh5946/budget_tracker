@@ -4,11 +4,13 @@ import { Card,Stack,ProgressBar,Button} from "react-bootstrap";
 export default function BudgetCard({
   name,
   max,
+  id,
   amount,
   displayExpenses,
   addExpense,
   showButtons,
-  gray
+  gray,
+  expenses
 }) {
 
     const classNames = []
@@ -50,7 +52,7 @@ export default function BudgetCard({
             >
               Add Expense
             </Button>
-            <Button onClick={displayExpenses} variant="outline-secondary">
+            <Button onClick={()=>{displayExpenses(expenses,name)}} variant="outline-secondary">
               View Expenses
             </Button>
           </Stack>
