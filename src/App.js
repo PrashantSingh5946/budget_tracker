@@ -6,6 +6,7 @@ import { useState } from "react";
 import AddExpenseModal from "./components/AddExpenseModal";
 import BudgetCard from "./components/BudgetCard";
 import ShowExpensesModal from "./components/ShowExpensesModal";
+import TotalCard from "./components/TotalCard";
 
 function App() {
   const {
@@ -20,8 +21,11 @@ function App() {
     UNCATEGORISED_CATEGORY_ID
   );
 
-  const[showExpenses,setShowExpenses] = useState(false);
-  function closeExpenses(){setShowExpenses(false); setDefaultCategory(UNCATEGORISED_CATEGORY_ID)}
+  const [showExpenses, setShowExpenses] = useState(false);
+  function closeExpenses() {
+    setShowExpenses(false);
+    setDefaultCategory(UNCATEGORISED_CATEGORY_ID);
+  }
 
   const [isAddBudgetModalVisible, setIsAddBudgetModalVisible] = useState(false);
   const closeAddBudgetModal = function () {
@@ -41,8 +45,7 @@ function App() {
     setIsAddExpenseModalVisible(true);
   };
 
-
-
+  const uncategorizedExpenses = getBudgetExpenses(UNCATEGORISED_CATEGORY_ID);
 
   return (
     <div className="App">
@@ -72,8 +75,7 @@ function App() {
                 0
               );
 
-              const expenses = getBudgetExpenses(budget._id)
-              console.log(expenses)
+              const expenses = getBudgetExpenses(budget._id);
               return (
                 <BudgetCard
                   key={budget._id}
@@ -81,16 +83,41 @@ function App() {
                   amount={amount}
                   max={budget.max}
                   addExpense={() => {
-                    setDefaultCategory(budget._id)
+                    setDefaultCategory(budget._id);
                     openAddExpenseModal();
                   }}
-                  displayExpenses={(expenses,name)=>{setShowExpenses(true); setDefaultCategory(budget._id)}}
+                  displayExpenses={(expenses, name) => {
+                    setShowExpenses(true);
+                    setDefaultCategory(budget._id);
+                  }}
                   expenses={[...expenses]}
                   id={budget._id}
                   showButtons
                 />
               );
             })}
+
+            {uncategorizedExpenses.length != 0 && (
+              <BudgetCard
+                name="Uncategorized"
+                showButtons
+                amount={getBudgetExpenses(UNCATEGORISED_CATEGORY_ID).reduce(
+                  (total, expense) => total + expense.amount,
+                  0
+                )}
+                addExpense={() => {
+                  setDefaultCategory(UNCATEGORISED_CATEGORY_ID);
+                  openAddExpenseModal();
+                }}
+                displayExpenses={(expenses, name) => {
+                  setShowExpenses(true);
+                  setDefaultCategory(UNCATEGORISED_CATEGORY_ID);
+                }}
+                expenses={getBudgetExpenses(UNCATEGORISED_CATEGORY_ID)}
+              />
+            )}
+
+            {budgets.length != 0 && <TotalCard />}
           </div>
         </Container>
 
@@ -107,10 +134,10 @@ function App() {
         ></AddExpenseModal>
 
         <ShowExpensesModal
-        show={showExpenses}
-        expenses={getBudgetExpenses(defaultCategory)}
-        handleClose={closeExpenses}
-        budget={budgets.find((budget) => budget._id==defaultCategory)}
+          show={showExpenses}
+          expenses={getBudgetExpenses(defaultCategory)}
+          handleClose={closeExpenses}
+          budget={budgets.find((budget) => budget._id == defaultCategory)}
         ></ShowExpensesModal>
       </Container>
     </div>

@@ -19,7 +19,6 @@ export default function AddExpenseModal({
     e.preventDefault();
     addExpense(expenseNameRef.current.value,parseFloat(amountRef.current.value),categoryRef.current.value)
     handleClose();
-    console.log(categoryRef.current.value);
   }
 
   return (

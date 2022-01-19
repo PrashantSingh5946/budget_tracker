@@ -8,7 +8,7 @@ export default function ShowExpensesModal({
   expenses,
   budget,
 }) {
-  const { deleteBudget } = useBudgets();
+  const { deleteBudget, deleteExpense } = useBudgets();
   function removeBudget(budgetId) {
     deleteBudget(budgetId);
     handleClose();
@@ -30,7 +30,7 @@ export default function ShowExpensesModal({
               <Stack direction="horizontal" gap="2" key={expense._id}>
                 <div className="me-auto fs-4">{expense.name}</div>
                 <div className="fs-5">{expense.amount}</div>
-                <Button onClick={() => {}} size="sm" variant="outline-danger">
+                <Button onClick={() => {deleteExpense(expense._id)}} size="sm" variant="outline-danger">
                   &times;
                 </Button>
               </Stack>
